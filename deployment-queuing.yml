@@ -1,0 +1,5 @@
+steps:
+- powershell: |
+     Write-Output "hello from pipeline decorator"
+  condition: succeeded()
+  displayName: 'Custom Decorator Task'

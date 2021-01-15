@@ -1,0 +1,36 @@
+{
+    "manifestVersion": 1,
+    "id": "deploymentqueuingdecorator",
+    "name": "YAML Deployment Queuing",
+    "version": "0.0.1",
+    "publisher": "ava-bcook",
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],    
+    "description": "Emulates the deployment queuing capabilities of Classic Release pipelines in multi-stage YAML pipelines",
+    "categories": [
+        "Azure Pipelines"
+    ],
+    "icons": {
+        "default": "icon.png"        
+    },
+    "files": [
+        {
+            "path": "deployment-queuing.yml"
+        }
+    ],
+    "contributions": [
+        {
+            "id": "yamlpipelinedecorator.deploymentqueueing",
+            "type": "ms.azure-pipelines.pipeline-decorator",
+            "targets": [
+                "ms.azure-pipelines-agent-job.post-job-tasks"
+            ],
+            "properties": {
+                "template": "deployment-queuing.yml"
+            }
+        }
+    ]
+}
