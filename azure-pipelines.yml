@@ -1,0 +1,59 @@
+trigger: 
+- main
+
+pool:
+  vmImage: "ubuntu-latest"
+
+variables:
+- name: PublisherID
+  value: ava-bcook
+- name: ExtensionID
+  value: deploymentqueuingdecorator
+- name: ExtensionName
+  value: YAML Deployment Queuing
+
+stages:
+  - stage: build_package
+    displayName: Build and Publish
+    jobs:
+      - job: build
+        steps:
+          - task: TfxInstaller@3
+            displayName: Use Tfx
+            inputs:
+              version: "v0.7.x"
+          - task: QueryAzureDevOpsExtensionVersion@3
+            displayName: Fetch Current Extension Version
+            inputs:
+              connectTo: 'VsTeam'
+              connectedServiceName: 'AzureDevOpsMarketplace'
+              publisherId: '$(PublisherID)'
+              extensionId: '$(ExtensionID)'
+              versionAction: 'Patch'
+              outputVariable: 'Task.Extension.Version'
+          - task: PackageAzureDevOpsExtension@3
+            displayName: Package Extension
+            inputs:
+              rootFolder: '$(System.DefaultWorkingDirectory)'
+              publisherId: '$(PublisherID)'
+              extensionId: '$(ExtensionID)'
+              extensionName: '$(ExtensionName)'
+              extensionVersion: '$(Task.Extension.Version)'
+              updateTasksVersion: true
+              updateTasksVersionType: 'patch'
+              extensionVisibility: 'private' # Change to public if you're publishing to the marketplace
+              extensionPricing: 'free'
+          - task: PublishAzureDevOpsExtension@3
+            displayName: Publish Extension
+            inputs:
+              connectTo: 'VsTeam'
+              connectedServiceName: 'AzureDevOpsMarketplace' # Change to whatever you named the service connection
+              fileType: 'vsix'
+              vsixFile: '$(System.DefaultWorkingDirectory)/*.vsix'
+              publisherId: '$(PublisherID)'
+              extensionId: '$(ExtensionID)'
+              extensionName: '$(ExtensionName)'
+              updateTasksVersion: false
+              extensionVisibility: 'private' # Change to public if you're publishing to the marketplace
+              extensionPricing: 'free'
+              shareWith: ava-bcook
