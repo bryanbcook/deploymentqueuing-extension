@@ -26,4 +26,7 @@ stages:
       runOnce:
         deploy:
           steps:
-            - script: echo 'hello'
+            - powershell: |
+                Write-Output "Environment.Id: " $(Environment.Id)
+            - powershell: Write-Output "Hello World"
+              condition: not(eq(variables['environment.id'],''))
