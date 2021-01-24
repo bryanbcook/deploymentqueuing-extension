@@ -3,7 +3,7 @@
     "id": "deploymentqueuingdecorator",
     "name": "YAML Deployment Queuing",
     "version": "0.0.1",
-    "publisher": "ava-bcook",
+    "publisher": "bcook",
     "targets": [
         {
             "id": "Microsoft.VisualStudio.Services"
@@ -18,12 +18,14 @@
     },
     "files": [
         {
-            "path": "deployment-queuing.yml"
+            "path": "deployment-queuing.yml",
+            "addressable": true,
+            "contentType": "text/plain"
         }
     ],
     "contributions": [
         {
-            "id": "yamlpipelinedecorator.deploymentqueueing",
+            "id": "deploymentqueuing-decorator",
             "type": "ms.azure-pipelines.pipeline-decorator",
             "targets": [
                 "ms.azure-pipelines-agent-job.post-job-tasks"

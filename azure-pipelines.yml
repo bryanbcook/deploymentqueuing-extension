@@ -1,5 +1,8 @@
 trigger: 
-- main
+  paths:
+    include:
+      - deployment-queuing.yml
+  
 
 pool:
   vmImage: "ubuntu-latest"

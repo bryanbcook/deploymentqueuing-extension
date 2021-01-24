@@ -1,5 +1,16 @@
 steps:
-- powershell: |
-     Write-Output "hello from pipeline decorator"
-  condition: succeeded()
-  displayName: 'Custom Decorator Task'
+  - ${{ if eq(variables['deploymentQueuing.enable'], true) }}:
+    - task: PowerShell@2
+      displayName: 'Post-job: Cancel Queued Builds'
+      condition: succeeded()
+      inputs:
+        targetType: inline
+        script: |
+          Write-Output "Build.BuildId: $(Build.BuildId)"
+          Write-Output "Build.SourceBranchName: $(Build.SourceBranchName)"
+          Write-Output "System.PhaseName:  $(System.PhaseName)"
+          Write-Output "System.StageName:  $(System.StageName)"
+          Write-Output "System.AccessToken $(System.AccessToken)"
+        pwsh: ${{ eq( variables['Agent.OS'], 'Linux') }}
+      
+      
