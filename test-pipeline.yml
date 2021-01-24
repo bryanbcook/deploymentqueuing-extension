@@ -8,11 +8,19 @@ trigger: none
 pool:
   vmImage: 'ubuntu-latest'
 
-jobs:
-- deployment: deploy1
-  environment: DEV
-  strategy:
-   runOnce:
-     deploy:
-       steps:
-         - script: echo 'hello'
+stages:
+- stage: build
+  jobs:
+  - job:
+    steps:
+    - script: echo 'hello world'
+
+- stage: deploy
+  jobs:  
+  - deployment: deploy1
+    environment: DEV
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - script: echo 'hello'
