@@ -8,6 +8,9 @@ trigger: none
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  deploymentQueuing.enable: true
+
 stages:
 - stage: build
   jobs:
