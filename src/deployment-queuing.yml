@@ -1,5 +1,6 @@
 steps:
-  - ${{ if eq(variables['deploymentQueuing.enable'], true) }}:
+  # only cancel builds if this is a deployment job and the pipeline has opted into the feature
+  - ${{ if and( not(eq(variables['environment.id'], '')), eq(variables['deploymentQueuing.enable'], true) ) }}:
     - task: PowerShell@2
       displayName: 'Post-job: Cancel Queued Builds'
       condition: succeeded()
