@@ -1,7 +1,8 @@
 trigger: 
   paths:
     include:
-      - deployment-queuing.yml
+      - src
+      - azure-pipelines.yml
   
 
 pool:
@@ -37,7 +38,7 @@ stages:
           - task: PackageAzureDevOpsExtension@3
             displayName: Package Extension
             inputs:
-              rootFolder: '$(System.DefaultWorkingDirectory)'
+              rootFolder: '$(System.DefaultWorkingDirectory)/src'
               publisherId: '$(PublisherID)'
               extensionId: '$(ExtensionID)'
               extensionName: '$(ExtensionName)'
