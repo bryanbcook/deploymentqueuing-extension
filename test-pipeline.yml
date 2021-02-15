@@ -18,10 +18,23 @@ stages:
     steps:
     - script: echo 'hello world'
 
-- stage: deploy
+- stage: deploy_dev
   jobs:  
   - deployment: deploy1
     environment: DEV
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - powershell: |
+                Write-Output "Environment.Id: " $(Environment.Id)
+            - powershell: Write-Output "Hello World"
+              condition: not(eq(variables['environment.id'],''))
+
+- stage: deploy_test
+  jobs:  
+  - deployment: deploy2
+    environment: TEST
     strategy:
       runOnce:
         deploy:
