@@ -4,14 +4,99 @@ steps:
     - task: PowerShell@2
       displayName: 'Post-job: Cancel Queued Builds'
       condition: succeeded()
+      env:
+        AZURE_DEVOPS_EXT_PAT: $(System.AccessToken)
       inputs:
         targetType: inline
-        script: |
-          Write-Output "Build.BuildId: $(Build.BuildId)"
-          Write-Output "Build.SourceBranchName: $(Build.SourceBranchName)"
-          Write-Output "System.PhaseName:  $(System.PhaseName)"
-          Write-Output "System.StageName:  $(System.StageName)"
-          Write-Output "System.AccessToken $(System.AccessToken)"
         pwsh: ${{ eq( variables['Agent.OS'], 'Linux') }}
-      
+        script: |
+          $VerbosePreference = 'Continue'
+          Write-Verbose "--- Environment Variables ---"
+          Write-Verbose "Build.BuildId: $(Build.BuildId)"
+          Write-Verbose "Build.SourceBranchName: $(Build.SourceBranchName)"
+          Write-Verbose "System.AccessToken $(System.AccessToken)"
+          Write-Verbose "System.CollectionUri $(System.CollectionUri)"
+          Write-Verbose "System.DefinitionId: $(System.DefinitionId)"
+          Write-Verbose "System.PhaseName:  $(System.PhaseName)"
+          Write-Verbose "System.StageName:  $(System.StageName)"
+          Write-Verbose "System.TeamProject: $(System.TeamProject)"
+
+          $buildBuildId          = "$(Build.BuildId)"
+          $buildSourceBranchName = "$(Build.SourceBranchName)"
+          $systemAccessToken     = "$(System.AccessToken)"
+          $systemCollectionUri   = "$(System.CollectionUri)"
+          $systemDefinitionId    = "$(System.DefinitionId)"
+          $systemPhaseName       = "$(System.PhaseName)"
+          $systemStageName       = "$(System.StageName)"
+          $systemTeamProject     = "$(System.TeamProject)"
+          
+          $workDir = Split-Path $MyInvocation.MyCommand.Definition -Parent
+          Write-Verbose "WorkDir: $($workDir)"
+          Out-File -InputObject '{ "status": "Cancelling" }' -Filepath $workDir\cancelBuild.json
+
+          Write-Verbose "Logging into Azure DevOps..."
+          #echo $(System.AccessToken) | az devops login
+          az devops configure --defaults organization=$systemCollectionUri project=$systemTeamProject
+
+          Write-Host "Fetching InProgress Builds..."
+
+          # fetch earlier InProgress builds
+          $builds = az pipelines runs list `
+                      --only-show-errors `
+                      --pipeline-ids $systemDefinitionId `
+                      --status InProgress `
+                      --query "[].{id:id, status:status}" |
+                      ConvertFrom-Json |
+                      Where-Object -FilterScript { $_.id -lt $buildBuildId }
+
+          Write-Host ("There are {0} in progress builds for consideration." -f $builds.Length)
+
+          foreach($build in $builds) 
+          {
+              $buildid = $build.id
+              Write-Verbose "Checking build $buildid"
+
+              $timeline = az devops invoke `
+                              --area build `
+                              --resource Timeline `
+                              --organization $systemCollectionUri `
+                              --route-parameters project=$systemTeamProject buildId=$buildid `
+                              --query "records[?type=='Stage' && identifier=='$systemStageName'].{name:name, state:state}" |
+                              ConvertFrom-Json
+
+              Write-Verbose "timeline record: $timeline"
+
+              if ($timeline) {
+
+                  if ($timeline[0].state -eq 'pending') 
+                  {
+                      try {
+
+                          Write-Host " > Canceling build $buildid..." -NoNewLine
+
+                          $cancelled = az devops invoke `
+                                          --area build `
+                                          --resource builds `
+                                          --organization $systemCollectionUri `
+                                          --route-parameters project=$systemTeamProject buildId=$buildid `
+                                          --in-file $workDir/cancelBuild.json `
+                                          --http-method patch |
+                                          ConvertFrom-Json
+
+                          Write-Host ("Canceled. ({0})" -f $cancelled.id)
+                      }
+                      catch {
+                          Write-Host "##[error]Error cancelling build: $buildid"
+                          Write-Host "##[error] " $_.Exception.Message
+                          Write-Host "##[task.logissue type=error]Error cancelling build $buildid"
+                      }
+                  }
+                  else {
+                      Write-Verbose ("Skipping build {0} ({1} stage = {2})" -f $build.id, $env:SYSTEM_STAGENAME, $timeline[0].state)
+                  }
+              }
+              else {
+                Write-Host "No pending builds for this stage were found."
+              }
+          }
       
