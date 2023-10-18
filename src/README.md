@@ -120,6 +120,6 @@ The `deployment-queuing` feature requires the following:
 
 Nothing. This extension adds a post-job task to cancel any pending builds that are pending for the stage that just completed. If there are no approval gates or previously pending builds, the script happily ignores them.
 
-## I'm running a self-hosted runner, does this have special requirements?
+### I'm running a self-hosted runner, does this have special requirements?
 
 Your self-hosted runner needs to have PowerShell or PowerShell Core installed.
