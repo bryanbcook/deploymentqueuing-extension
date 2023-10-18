@@ -1,16 +1,20 @@
+###############################################################################
+# Marketplace Extension 
+#
+# Packages and publishes the deploymentqueuing-extension to the marketplace
+###############################################################################
 trigger: 
   paths:
     include:
       - src
-      - azure-pipelines.yml
+      - devops/pipelines/marketplace-extension/pipeline.yml
   
-
 pool:
   vmImage: "ubuntu-latest"
 
 variables:
 - name: PublisherID
-  value: ava-bcook
+  value: bcook
 - name: ExtensionID
   value: deploymentqueuingdecorator
 - name: ExtensionName
@@ -60,4 +64,4 @@ stages:
               updateTasksVersion: false
               extensionVisibility: 'private' # Change to public if you're publishing to the marketplace
               extensionPricing: 'free'
-              shareWith: ava-bcook
+              #shareWith: ava-bcook

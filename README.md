@@ -1,10 +1,5 @@
-# Introduction 
-This sample project demonstrates how to use a pipeline decorator to emulate the capabilities of Classic Release "Deployment Queuing Options" in YAML multi-stage pipelines.
+# Azure DevOps Deployment Queuing for YAML Pipelines
 
-# Publishing to the Marketplace
-Your PAT token requires 
+Deployment Queue Settings is a feature of Classic Release pipelines that "define the behavior when multiple releases are queued for deployment." This [includes a setting that specifies][1] what should happen if a newer build is queued while an existing build is queued or waiting for approval. This extension aims to emulate the _"Deploy latest and cancel the others"_ capability for YAML multi-stage pipelines.
 
-- Scope: All available organizations
-- Marketplace: Read, Manage, Acquire, Publish
-
-You will need to add the [Azure Devops Extension Tasks](https://marketplace.visualstudio.com/items?itemName=ms-devlabs.vsts-developer-tools-build-tasks&targetId=85fb3d5a-9f21-420f-8de3-fc80bf29054b&utm_source=vstsproduct&utm_medium=ExtHubManageList) extension to your Azure DevOps Organization
+By default, YAML pipelines will remain in a pending state until they timeout -- which by default is 30 days. This extension adds functionality that will auto-cancel older pipelines when a newer build completes successfully.
