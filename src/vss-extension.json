@@ -32,6 +32,15 @@
             "path": "README.md"
         }
     },
+    "links": {
+        "issues": {
+            "uri": "https://github.com/bryanbcook/deploymentqueuing-extension/issues"
+        }
+    },
+    "repository": {
+        "type": "git",
+        "uri": "https://github.com/bryanbcook/deploymentqueuing-extension"
+    },
     "files": [
         {
             "path": "deployment-queuing.yml",
