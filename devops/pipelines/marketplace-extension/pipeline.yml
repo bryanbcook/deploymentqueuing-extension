@@ -6,19 +6,17 @@
 trigger: 
   paths:
     include:
-      - src
-      - devops/pipelines/marketplace-extension/pipeline.yml
+    - src
+    - devops/pipelines/marketplace-extension/pipeline.yml
+  branches:
+    include:
+    - main
   
 pool:
   vmImage: "ubuntu-latest"
 
 variables:
-- name: PublisherID
-  value: bcook
-- name: ExtensionID
-  value: deploymentqueuingdecorator
-- name: ExtensionName
-  value: YAML Deployment Queuing
+- group: pipeline-extension-settings
 
 stages:
   - stage: build_package
@@ -26,10 +24,14 @@ stages:
     jobs:
       - job: build
         steps:
+          # install the extension cli tool
           - task: TfxInstaller@3
             displayName: Use Tfx
             inputs:
               version: "v0.7.x"
+
+          # fetch the current extension version
+          #   You must build and upload manually for the first execution
           - task: QueryAzureDevOpsExtensionVersion@3
             displayName: Fetch Current Extension Version
             inputs:
@@ -39,6 +41,8 @@ stages:
               extensionId: '$(ExtensionID)'
               versionAction: 'Patch'
               outputVariable: 'Task.Extension.Version'
+          
+          # Create the vsix package
           - task: PackageAzureDevOpsExtension@3
             displayName: Package Extension
             inputs:
@@ -49,19 +53,21 @@ stages:
               extensionVersion: '$(Task.Extension.Version)'
               updateTasksVersion: true
               updateTasksVersionType: 'patch'
-              extensionVisibility: 'public' # Change to public if you're publishing to the marketplace
+              extensionVisibility: 'private' 
               extensionPricing: 'free'
+
+          # Upload and publish the extension
           - task: PublishAzureDevOpsExtension@3
             displayName: Publish Extension
             inputs:
               connectTo: 'VsTeam'
-              connectedServiceName: 'AzureDevOpsMarketplace' # Change to whatever you named the service connection
+              connectedServiceName: 'AzureDevOpsMarketplace' 
               fileType: 'vsix'
               vsixFile: '$(System.DefaultWorkingDirectory)/*.vsix'
               publisherId: '$(PublisherID)'
               extensionId: '$(ExtensionID)'
               extensionName: '$(ExtensionName)'
               updateTasksVersion: false
-              extensionVisibility: 'public' # Change to public if you're publishing to the marketplace
+              extensionVisibility: 'private' # Pipeline Decorators must be private
               extensionPricing: 'free'
-              #shareWith: ava-bcook
+              shareWith: $(SharedWith)
