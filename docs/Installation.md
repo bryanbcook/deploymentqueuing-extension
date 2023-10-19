@@ -11,7 +11,7 @@ You have three possible options:
 
 ## Install via Sharing
 
-A private extensioncan be "shared" so that it is made available to your Azure DevOps Organization. Once shared, your Project Collection Administrator can install it through the link available in **General > Extensions : Shared** tab.
+A private extension can be "shared" so that it is made available to your Azure DevOps Organization. Once shared, your Project Collection Administrator can install it through the link available in **General > Extensions : Shared** tab.
 
 ![Shared Tab](img/extensions-shared.png)
 
