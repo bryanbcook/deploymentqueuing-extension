@@ -10,7 +10,9 @@ steps:
         targetType: inline
         pwsh: ${{ eq( variables['Agent.OS'], 'Linux') }}
         script: |
-          $VerbosePreference = 'Continue'
+          if ($env:SYSTEM_DEBUG -eq 'true') {
+            $VerbosePreference = 'Continue'
+          }          
           Write-Verbose "--- Environment Variables ---"
           Write-Verbose "Build.BuildId: $(Build.BuildId)"
           Write-Verbose "Build.SourceBranchName: $(Build.SourceBranchName)"
