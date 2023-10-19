@@ -4,6 +4,8 @@ Deployment Queue Settings is a feature of Classic Release pipelines that "define
 
 By default, YAML pipelines will remain in a pending state until they timeout -- which by default is 30 days. This extension adds functionality that will auto-cancel older pipelines when a newer build completes successfully.
 
+More information is available in the extension's [README.md][4]
+
 [![Build Status](https://dev.azure.com/ava-bcook/Deployment-Queuing/_apis/build/status%2Fbryanbcook.deploymentqueuing-extension?branchName=main)](https://dev.azure.com/ava-bcook/Deployment-Queuing/_build/latest?definitionId=72&branchName=main)
 
 > **Note:**
@@ -15,4 +17,6 @@ By default, YAML pipelines will remain in a pending state until they timeout -- 
 
 [2]: https://learn.microsoft.com/en-us/azure/devops/extend/develop/add-pipeline-decorator?toc=%2Fazure%2Fdevops%2Fmarketplace-extensibility%2Ftoc.json&view=azure-devops#3-install-the-decorator
 
-[3]: ./docs/Installation.md
+[3]: https://github.com/bryanbcook/deploymentqueuing-extension/blob/main/docs/Installation.md
+
+[4]: https://github.com/bryanbcook/deploymentqueuing-extension/blob/main/src/README.md
