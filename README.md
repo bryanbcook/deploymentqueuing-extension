@@ -15,4 +15,4 @@ By default, YAML pipelines will remain in a pending state until they timeout -- 
 
 [2]: https://learn.microsoft.com/en-us/azure/devops/extend/develop/add-pipeline-decorator?toc=%2Fazure%2Fdevops%2Fmarketplace-extensibility%2Ftoc.json&view=azure-devops#3-install-the-decorator
 
-[3]: docs/Installation.md
+[3]: ./docs/Installation.md
