@@ -98,9 +98,9 @@ First determine the authorization scope for your pipelines:
 1. Select **Pipelines > Settings**
 1. Review the setting for _"Limit job authorization scope to current project for non-release pipelines"_
 
-If this value is enabled, your pipelines operate using a user account _`<Project Name> Build Service (<Organization Name)`_
+If this value is enabled, your pipelines operate using a user account _`<Project Name> Build Service (<Organization Name>)`_
 
-If this value is not enabled, your pipelines operate under _`Project Collection Build Service (<Organization Name)`_.
+If this value is not enabled, your pipelines operate under _`Project Collection Build Service (<Organization Name>)`_.
 
 Next, configure the permissions for the build agent:
 
