@@ -13,14 +13,43 @@
     "categories": [
         "Azure Pipelines"
     ],
+    "tags": [
+        "Yaml",
+        "Continuous Integration",
+        "Continuous Delivery",
+        "Approvals",
+        "Checks",
+        "Gates",
+        "Queue",
+        "Multi-Stage",
+        "Deployment"
+    ],
     "icons": {
-        "default": "icon.png"        
+        "default": "icon-128x128.png"
+    },
+    "content": {
+        "details": {
+            "path": "README.md"
+        }
+    },
+    "links": {
+        "issues": {
+            "uri": "https://github.com/bryanbcook/deploymentqueuing-extension/issues"
+        }
+    },
+    "repository": {
+        "type": "git",
+        "uri": "https://github.com/bryanbcook/deploymentqueuing-extension"
     },
     "files": [
         {
             "path": "deployment-queuing.yml",
             "addressable": true,
             "contentType": "text/plain"
+        },
+        {
+            "path": "img",
+            "addressable": true
         }
     ],
     "contributions": [

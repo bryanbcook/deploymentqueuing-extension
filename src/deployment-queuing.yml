@@ -51,8 +51,7 @@ steps:
 
           Write-Host ("There are {0} in progress builds for consideration." -f $builds.Length)
 
-          foreach($build in $builds) 
-          {
+          foreach($build in $builds) {
               $buildid = $build.id
               Write-Verbose "Checking build $buildid"
 
@@ -68,8 +67,7 @@ steps:
 
               if ($timeline) {
 
-                  if ($timeline[0].state -eq 'pending') 
-                  {
+                  if ($timeline[0].state -eq 'pending') {
                       try {
 
                           Write-Host " > Canceling build $buildid..." -NoNewLine
