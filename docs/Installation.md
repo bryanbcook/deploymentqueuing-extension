@@ -34,7 +34,7 @@ Azure DevOps setup:
 
 1. Install the [Azure DevOps Extensions Tasks][extensions-task] and follow their "How to use" instructions on how to setup a PAT token that can communicate with the marketplace.
 
-1. Create a "Visual Studio Marketplace" extension that uses the PAT token
+1. In your Azure DevOps Project, create a "Visual Studio Marketplace" Service-Connection that uses the PAT token
 
 1. Create a variable group `pipeline-extension-settings` and add the following:
 
@@ -45,7 +45,7 @@ Azure DevOps setup:
    | PublisherId    | your publisher name in the marketplace
    | SharedWith     | comma-delimited list of azure devops organizations
 
-1. Create a new Pipeline and link it to the existing [/devops/pipelines/marketplace-extension/pipeline.yml][pipeline] YAML
+1. Create a new Pipeline and link it to the existing YAML pipeline [/devops/pipelines/marketplace-extension/pipeline.yml][pipeline]
 
 Marketplace Setup:
 
