@@ -42,8 +42,7 @@ When the pipeline runs, it will automatically inject a step into your pipeline t
 
 > **Note:**
 >
-> Your stage must use a [`deployment`][3] job that
-
+> The post-job task only appears if your stage uses a [`deployment`][3] job that is associated with an _Enviroment_.
 
 ## Example
 
