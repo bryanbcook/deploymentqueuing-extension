@@ -33,11 +33,11 @@ steps:
           $systemTeamProject     = "$(System.TeamProject)"
           
           $workDir = Split-Path $MyInvocation.MyCommand.Definition -Parent
-          Write-Verbose "WorkDir: $($workDir)"
-          Out-File -InputObject '{ "status": "Cancelling" }' -Filepath $workDir\cancelBuild.json
+          $payloadFile = Join-Path $workDir "cancelBuild.json"
+          Write-Verbose "Payload file: $payloadFile"
+          Out-File -InputObject '{ "status": "Cancelling" }' -Filepath $payloadFile -Encoding ascii
 
-          Write-Verbose "Logging into Azure DevOps..."
-          #echo $(System.AccessToken) | az devops login
+          # set defaults
           az devops configure --defaults organization=$systemCollectionUri project=$systemTeamProject
 
           Write-Host "Fetching InProgress Builds..."
@@ -49,7 +49,7 @@ steps:
                       --status InProgress `
                       --query "[].{id:id, status:status}" |
                       ConvertFrom-Json |
-                      Where-Object -FilterScript { $_.id -lt $buildBuildId }
+                      Where-Object { $_.id -lt $buildBuildId }
 
           Write-Host ("There are {0} in progress builds for consideration." -f $builds.Length)
 
@@ -82,7 +82,7 @@ steps:
                                           --resource builds `
                                           --organization $systemCollectionUri `
                                           --route-parameters project=$systemTeamProject buildId=$buildid `
-                                          --in-file $workDir/cancelBuild.json `
+                                          --in-file $payloadFile `
                                           --http-method patch |
                                           ConvertFrom-Json
 
