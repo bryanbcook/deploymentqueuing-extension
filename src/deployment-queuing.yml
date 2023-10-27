@@ -65,9 +65,12 @@ steps:
                               --query "records[?type=='Stage' && identifier=='$systemStageName'].{name:name, state:state}" |
                               ConvertFrom-Json
 
-              Write-Verbose "timeline record: $timeline"
+              Write-Verbose ("timeline record: {0}" -f ($timeline | Out-String))
 
               if ($timeline) {
+
+                  Write-Verbose ("name: {0}" -f $timeline[0].name)
+                  Write-Verbose ("state: {0}" -f $timeline[0].state)
 
                   if ($timeline[0].state -eq 'pending') {
                       try {
