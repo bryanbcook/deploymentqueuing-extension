@@ -55,7 +55,7 @@ Marketplace Setup:
 1. Before you can run the pipeline, the extension must exist in the marketplace:
 
    1. Clone the repository locally
-   1. Install tfx extensions: `npm install -g tfxcli`
+   1. Install tfx extensions: `npm install -g tfx-cli`
    1. Modify the [/src/vssextension.json][vss-extension] to match the values in the variable group above:
       - extension name
       - publisher name
